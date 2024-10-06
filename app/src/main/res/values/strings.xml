@@ -43,4 +43,5 @@
         <item quantity="one">%d cupcake</item>
         <item quantity="other">%d cupcakes</item>
     </plurals>
+    <string name="title_activity_custom_view">CustomView</string>
 </resources>

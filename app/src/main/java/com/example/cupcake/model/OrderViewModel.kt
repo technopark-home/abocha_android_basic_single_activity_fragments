@@ -15,9 +15,12 @@
  */
 package com.example.cupcake.model
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+//import androidx.lifecycle.Transformations
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -37,25 +40,25 @@ private const val PRICE_FOR_SAME_DAY_PICKUP = 3.00
 class OrderViewModel : ViewModel() {
 
     // Quantity of cupcakes in this order
-    private val _quantity = MutableLiveData<Int>()
-    val quantity: LiveData<Int> = _quantity
+    private val _quantity = mutableIntStateOf(0)
+    val quantityContent: State<Int> = _quantity
 
     // Cupcake flavor for this order
-    private val _flavor = MutableLiveData<String>()
-    val flavor: LiveData<String> = _flavor
+    private val _flavor = mutableStateOf("")
+    val flavor: State<String> = _flavor
 
     // Possible date options
     val dateOptions: List<String> = getPickupOptions()
 
     // Pickup date
-    private val _date = MutableLiveData<String>()
-    val date: LiveData<String> = _date
+    private val _date = mutableStateOf("")
+    val date: State<String> = _date
 
     // Price of the order so far
-    private val _price = MutableLiveData<Double>()
-    val price: LiveData<String> = Transformations.map(_price) {
+    private val _price = mutableDoubleStateOf(0.0)
+    val price: State<String> = derivedStateOf {
         // Format the price into the local currency and return this as LiveData<String>
-        NumberFormat.getCurrencyInstance().format(it)
+        NumberFormat.getCurrencyInstance().format(_price.doubleValue)
     }
 
     init {
@@ -69,7 +72,7 @@ class OrderViewModel : ViewModel() {
      * @param numberCupcakes to order
      */
     fun setQuantity(numberCupcakes: Int) {
-        _quantity.value = numberCupcakes
+        _quantity.intValue = numberCupcakes
         updatePrice()
     }
 
@@ -96,29 +99,29 @@ class OrderViewModel : ViewModel() {
      * Returns true if a flavor has not been selected for the order yet. Returns false otherwise.
      */
     fun hasNoFlavorSet(): Boolean {
-        return _flavor.value.isNullOrEmpty()
+        return _flavor.value.isEmpty()
     }
 
     /**
      * Reset the order by using initial default values for the quantity, flavor, date, and price.
      */
     fun resetOrder() {
-        _quantity.value = 0
+        _quantity.intValue = 0
         _flavor.value = ""
         _date.value = dateOptions[0]
-        _price.value = 0.0
+        _price.doubleValue = 0.0
     }
 
     /**
      * Updates the price based on the order details.
      */
     private fun updatePrice() {
-        var calculatedPrice = (quantity.value ?: 0) * PRICE_PER_CUPCAKE
+        var calculatedPrice = quantityContent.value * PRICE_PER_CUPCAKE
         // If the user selected the first option (today) for pickup, add the surcharge
         if (dateOptions[0] == _date.value) {
             calculatedPrice += PRICE_FOR_SAME_DAY_PICKUP
         }
-        _price.value = calculatedPrice
+        _price.doubleValue = calculatedPrice
     }
 
     /**
