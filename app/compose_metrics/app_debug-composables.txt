@@ -1,0 +1,60 @@
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun AppCupcakeNavHost(
+  stable viewModel: OrderViewModel
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable, [androidx.compose.ui.UiComposable]]") fun CupcakeMainScreen(
+  stable onHome: Function0<Unit>? = @static null
+  stable titleLabel: String
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable, [androidx.compose.ui.UiComposable]]") fun OffsetRowElements(
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun OffsetRowElementsPreview()
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun FlavorScreen(
+  stable viewModel: OrderViewModel
+  stable onCancel: Function0<Unit>
+  stable onNext: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun PickupScreen(
+  stable viewModel: OrderViewModel
+  stable onCancel: Function0<Unit>
+  stable onNext: Function0<Unit>
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun StartScreen(
+  unstable navHostController: NavHostController
+  stable viewModel: OrderViewModel? = @dynamic viewModel(null, null, null, null, $composer, 0, 0b1111)
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun ButtonsPanel(
+  stable textButton: String
+  stable onClickButton: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun SummaryScreen(
+  stable viewModel: OrderViewModel
+  stable onCancel: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun RowOrder(
+  stable name: String
+  stable value: String
+  stable bottomMargin: Dp = @dynamic dimensionResource(dimen.side_margin, $composer, 0)
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun SummaryDivider(
+  stable topMargin: Dp = @dynamic dimensionResource(dimen.side_margin, $composer, 0)
+  stable bottomMargin: Dp = @dynamic dimensionResource(dimen.side_margin, $composer, 0)
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun ButtonBox(
+  stable onNext: Function0<Unit>
+  stable onCancel: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun RadioGroupPanel(
+  stable itemsGroup: SnapshotStateList<String>
+  stable selectedState: String
+  stable onClick: Function1<@[ParameterName(name = 'text')] String, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun TotalResult(
+  stable total: String
+)
+restartable skippable scheme("[0, [0]]") fun CupCakeTheme(
+  stable darkTheme: Boolean = @dynamic isSystemInDarkTheme($composer, 0)
+  stable dynamicColor: Boolean = @static false
+  stable content: Function2<Composer, Int, Unit>
+)

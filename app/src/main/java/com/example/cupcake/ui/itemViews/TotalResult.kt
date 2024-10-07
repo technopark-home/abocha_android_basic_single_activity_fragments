@@ -19,7 +19,6 @@ fun TotalResult( total : String) {
             .padding(vertical = dimensionResource(R.dimen.side_margin)),
     )
 
-    println("Total:$total")
     Text(text = String.format( stringResource(R.string.subtotal_price), total),
         modifier = Modifier.fillMaxWidth(),
         textAlign =  TextAlign.Right,

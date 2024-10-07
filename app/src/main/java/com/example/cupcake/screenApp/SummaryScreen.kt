@@ -22,13 +22,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.cupcake.R
 import com.example.cupcake.model.OrderViewModel
 
 @Composable
-fun SummaryScreen(viewModel: OrderViewModel = viewModel(), navHostController: NavHostController) {
+fun SummaryScreen(viewModel: OrderViewModel, onCancel : () -> Unit) {
     Column(
         modifier = Modifier
             .padding(dimensionResource(R.dimen.side_margin))
@@ -70,10 +68,7 @@ fun SummaryScreen(viewModel: OrderViewModel = viewModel(), navHostController: Na
         { Text(stringResource(id = R.string.send).uppercase(),
             style = MaterialTheme.typography.labelMedium) }
 
-        OutlinedButton(onClick = {
-            viewModel.resetOrder()
-            navHostController.popBackStack(CupcakeRoute.START_ROUTE, inclusive = false)
-        },
+        OutlinedButton(onClick = onCancel,
             shape = MaterialTheme.shapes.extraSmall,
             modifier = Modifier
                 .fillMaxWidth()

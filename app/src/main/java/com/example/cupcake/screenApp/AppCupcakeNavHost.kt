@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -69,18 +68,23 @@ fun AppCupcakeNavHost(viewModel: OrderViewModel) {
     val enterTransitionShrinkOut : (AnimatedContentTransitionScope<NavBackStackEntry>) -> ExitTransition
             = { shrinkOut(tween(1000), Alignment.BottomEnd) { it / 10 } }
 
-    NavHost(
-        navController = navController, startDestination = CupcakeRoute.START_ROUTE,
-    ) {
+    val onHome : () -> Unit = {
+        navController.popBackStack(CupcakeRoute.START_ROUTE, inclusive = false)
+        UInt
+    }
+    val onCancel : () -> Unit = {
+        viewModel.resetOrder()
+        navController.popBackStack(CupcakeRoute.START_ROUTE, inclusive = false)
+    }
+    val onNextFlavor : () -> Unit = { navController.navigate(CupcakeRoute.PICKUP_ROUTE) }
+    val onNextPickup : () -> Unit = { navController.navigate(CupcakeRoute.SUMMARY_ROUTE) }
+
+    NavHost( navController = navController, startDestination = CupcakeRoute.START_ROUTE ) {
         composable(CupcakeRoute.START_ROUTE,
             enterTransition = { slideInHorizontally(animationSpec = tween(500)) },
             exitTransition = { slideOutHorizontally(animationSpec = tween(500)) }
         ) {
-            CupCakeMainScreen(
-                navHostController = navController,
-                titleLabel = stringResource(id = R.string.app_name),
-                isShowHome = false
-            ) {
+            CupcakeMainScreen( titleLabel = stringResource(id = R.string.app_name) ) {
                 StartScreen(
                     navHostController = navController,
                     viewModel = viewModel
@@ -92,11 +96,11 @@ fun AppCupcakeNavHost(viewModel: OrderViewModel) {
             enterTransition = enterTransitionFadeIn,
             exitTransition = enterTransitionFadeOut
         ) {
-            CupCakeMainScreen(
-                navHostController = navController,
+            CupcakeMainScreen(
+                onHome,
                 titleLabel = stringResource(id = R.string.choose_flavor)
             ) {
-                FlavorScreen(navHostController = navController, viewModel = viewModel)
+                FlavorScreen(viewModel = viewModel, onCancel, onNextFlavor )
             }
         }
         composable(
@@ -104,14 +108,11 @@ fun AppCupcakeNavHost(viewModel: OrderViewModel) {
             enterTransition = enterTransitionExpandIn,
             exitTransition = enterTransitionShrinkOut
         ) {
-            CupCakeMainScreen(
-                navHostController = navController,
+            CupcakeMainScreen(
+                onHome,
                 stringResource(id = R.string.choose_pickup_date)
             ) {
-                PickupScreen(
-                    navHostController = navController,
-                    viewModel = viewModel
-                )
+                PickupScreen( viewModel = viewModel, onCancel, onNextPickup )
             }
         }
         composable(
@@ -119,14 +120,11 @@ fun AppCupcakeNavHost(viewModel: OrderViewModel) {
             enterTransition = enterTransitionScaleIn,
             exitTransition = enterTransitionScaleOut
         ) {
-            CupCakeMainScreen(
-                navHostController = navController,
+            CupcakeMainScreen(
+                onHome,
                 stringResource(id = R.string.order_summary)
             ) {
-                SummaryScreen(
-                    navHostController = navController,
-                    viewModel = viewModel
-                )
+                SummaryScreen( viewModel = viewModel, onCancel )
             }
         }
     }
@@ -134,8 +132,8 @@ fun AppCupcakeNavHost(viewModel: OrderViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CupCakeMainScreen(navHostController: NavHostController, titleLabel: String, isShowHome: Boolean = true, content: @Composable () -> Unit) {
-    val colors: TopAppBarColors = TopAppBarColors (
+fun CupcakeMainScreen( onHome: (() -> Unit)? = null, titleLabel: String, content: @Composable () -> Unit) {
+    val colors = TopAppBarColors (
         containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         titleContentColor = MaterialTheme.colorScheme.onSurface,
         navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
@@ -148,10 +146,8 @@ fun CupCakeMainScreen(navHostController: NavHostController, titleLabel: String, 
             TopAppBar(
                 title = { Text(titleLabel)},
                 navigationIcon = {
-                    if (isShowHome) {
-                        IconButton(onClick = {
-                            navHostController.popBackStack(CupcakeRoute.START_ROUTE, inclusive = false)
-                        }) {
+                    if (onHome!=null) {
+                        IconButton(onClick = onHome) {
                             Icon(
                                 imageVector = Icons.Filled.Home,
                                 contentDescription = "Back"

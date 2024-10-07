@@ -20,7 +20,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -48,7 +50,7 @@ class OrderViewModel : ViewModel() {
     val flavor: State<String> = _flavor
 
     // Possible date options
-    val dateOptions: List<String> = getPickupOptions()
+    val dateOptions: SnapshotStateList<String> = getPickupOptions()
 
     // Pickup date
     private val _date = mutableStateOf("")
@@ -127,8 +129,8 @@ class OrderViewModel : ViewModel() {
     /**
      * Returns a list of date options starting with the current date and the following 3 dates.
      */
-    private fun getPickupOptions(): List<String> {
-        val options = mutableListOf<String>()
+    private fun getPickupOptions(): SnapshotStateList<String> {
+        val options = mutableStateListOf<String>()
         val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
         val calendar = Calendar.getInstance()
         repeat(4) {

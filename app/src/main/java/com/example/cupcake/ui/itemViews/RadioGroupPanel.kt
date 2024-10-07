@@ -14,6 +14,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -22,7 +23,7 @@ import com.example.cupcake.R
 
 
 @Composable
-fun RadioGroupPanel(languages : List<String>, selectedState : String, onClick : (text:String) -> Unit) {
+fun RadioGroupPanel(itemsGroup : SnapshotStateList<String>, selectedState : String, onClick : (text:String) -> Unit) {
     Column(
         Modifier
             .selectableGroup()
@@ -31,7 +32,7 @@ fun RadioGroupPanel(languages : List<String>, selectedState : String, onClick : 
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        languages.forEach { text ->
+        itemsGroup.forEach { text ->
             val isSelected = (text == selectedState)
             Row(modifier = Modifier
                 .wrapContentSize()

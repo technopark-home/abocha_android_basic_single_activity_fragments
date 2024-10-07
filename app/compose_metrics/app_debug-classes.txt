@@ -1,0 +1,41 @@
+stable class MainActivity {
+  <runtime stability> = Stable
+}
+stable class OrderViewModel {
+  stable val _quantity: MutableIntState
+  stable val quantityContent: State<Int>
+  stable val _flavor: MutableState<String>
+  stable val flavor: State<String>
+  stable val dateOptions: SnapshotStateList<String>
+  stable val _date: MutableState<String>
+  stable val date: State<String>
+  stable val _price: MutableDoubleState
+  stable val price: State<String>
+  <runtime stability> = Stable
+}
+stable class CupcakeRoute {
+  stable val START_ROUTE: String
+  stable val FLAVOR_ROUTE: String
+  stable val PICKUP_ROUTE: String
+  stable val SUMMARY_ROUTE: String
+  <runtime stability> = Stable
+}
+stable class AppColors {
+  stable val pink_400: Color
+  stable val pink_600: Color
+  stable val pink_950: Color
+  stable val purple_400: Color
+  stable val purple_700: Color
+  stable val black: Color
+  stable val white: Color
+  stable val primary: Color
+  stable val primaryVariant: Color
+  stable val onPrimary: Color
+  stable val secondary: Color
+  stable val secondaryVariant: Color
+  stable val onSecondary: Color
+  stable val light: Color
+  stable val dark: Color
+  stable val transparent: Color
+  <runtime stability> = Stable
+}
